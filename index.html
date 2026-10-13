@@ -25,7 +25,7 @@
             <!-- Logo -->
             <a href="#home" class="logo" aria-label="GP Interior Vision home">
                 <img src="images/logo.jpeg" alt="GP Interior Vision logo">
-                <span class="para">GP Interior design</p>
+                <span class="para">GP Interior design</span>
             </a>
 
             <ul class="nav-links">
@@ -524,11 +524,9 @@
                 </button>
 
 
-                <p class="form-note">
-
-                    Your inquiry opens in WhatsApp.
-                    This static website does not store form submissions.
-
+                <p class="form-note" id="form-status">
+                   Your inquiry opens in WhatsApp.
+                  This static website does not store form submissions.
                 </p>
 
             </form>
@@ -564,9 +562,171 @@
         WhatsApp
     </a>
 
-    <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+<script>
+/* =========================================================
+   GP INTERIOR VISION
+   CONTACT FORM → WHATSAPP
+========================================================= */
 
+/* =========================
+   CURRENT YEAR
+========================= */
+
+const yearElement = document.getElementById("year");
+
+if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+}
+
+
+/* =========================
+   CONTACT FORM
+========================= */
+
+const contactForm = document.getElementById("contact-form");
+const formStatus = document.getElementById("form-status");
+
+
+if (contactForm) {
+
+    contactForm.addEventListener("submit", function (event) {
+
+        /* Stop normal form submission */
+        event.preventDefault();
+
+
+        /* =========================
+           GET FORM VALUES
+        ========================= */
+
+        const name = document.getElementById("name").value.trim();
+
+        const phone = document.getElementById("phone").value.trim();
+
+        const service = document.getElementById("service").value;
+
+        const message = document.getElementById("message").value.trim();
+
+
+        /* =========================
+           VALIDATE NAME
+        ========================= */
+
+        if (name === "") {
+
+            formStatus.textContent =
+                "Please enter your name.";
+
+            document.getElementById("name").focus();
+
+            return;
+        }
+
+
+        /* =========================
+           VALIDATE PHONE
+        ========================= */
+
+        const phonePattern = /^[0-9]{10}$/;
+
+        if (!phonePattern.test(phone)) {
+
+            formStatus.textContent =
+                "Please enter a valid 10-digit phone number.";
+
+            document.getElementById("phone").focus();
+
+            return;
+        }
+
+
+        /* =========================
+           VALIDATE SERVICE
+        ========================= */
+
+        if (service === "") {
+
+            formStatus.textContent =
+                "Please select a service.";
+
+            document.getElementById("service").focus();
+
+            return;
+        }
+
+
+        /* =========================
+           CREATE WHATSAPP MESSAGE
+        ========================= */
+
+        const whatsappMessage =
+`Hello GP Interior Vision,
+
+I would like to enquire about your interior services.
+
+Name: ${name}
+Phone: ${phone}
+Service Required: ${service}
+
+Project Details:
+${message || "Not provided"}
+
+Thank you.`;
+
+
+        /* =========================
+           GP INTERIOR VISION
+           WHATSAPP NUMBER
+        ========================= */
+
+        const whatsappNumber = "919030813563";
+
+
+        /* =========================
+           CREATE WHATSAPP URL
+        ========================= */
+
+        const whatsappURL =
+            "https://wa.me/" +
+            whatsappNumber +
+            "?text=" +
+            encodeURIComponent(whatsappMessage);
+
+
+        /* =========================
+           SHOW MESSAGE
+        ========================= */
+
+        formStatus.textContent =
+            "Opening WhatsApp...";
+
+
+        /* =========================
+           OPEN WHATSAPP
+        ========================= */
+
+        window.open(
+            whatsappURL,
+            "_blank"
+        );
+
+
+        /* =========================
+           RESET FORM
+        ========================= */
+
+        setTimeout(function () {
+
+            contactForm.reset();
+
+            formStatus.textContent =
+                "Your inquiry opens in WhatsApp.";
+
+        }, 1500);
+
+    });
+
+}
+</script>
 </body>
 </html>
